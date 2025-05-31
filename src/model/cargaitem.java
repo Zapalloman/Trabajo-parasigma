@@ -6,24 +6,35 @@ import java.util.*;
 
 
 public class cargaitem {
-    public static List<item> cargarItems() throws IOException {
-        // Cargar los items desde el archivo preguntas.txt
-        // Cada línea del archivo representa un item
-        // El formato de cada línea es: tipo,pregunta,respuesta,opcion1,opcion2,...
+    public static class resultadocarga {
+        public String asignatura;
+        public String evaluacion;
+        public List<item> items;
+        public resultadocarga(String asignatura, String evaluacion, List<item> items) {
+            this.asignatura = asignatura;
+            this.evaluacion = evaluacion;
+            this.items = items;
+        } 
+    }
+    public static resultadocarga cargarItems(File archivo) throws IOException {
         List<item> items = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader("preguntas.txt"));
-        String linea;
-        while ((linea = br.readLine()) != null) {
-            if (linea.startsWith("#") || linea.trim().isEmpty()) continue; // Ignorar comentarios y líneas vacías
-            String[] partes = linea.split(",");
-            if (partes[0].equals("multiple")) {
-                items.add(new multiple(partes[0], partes[1], partes[2], Arrays.copyOfRange(partes, 3, partes.length)));
-            } else if (partes[0].equals("vf")) {
-                items.add(new vf(partes[0], partes[1], partes[2]));
+        String asignatura;
+        String evaluacion;
+        try (BufferedReader br = new BufferedReader(new FileReader("preguntas.txt"))) {
+            asignatura = br.readLine(); // Leer la primera línea 
+            evaluacion = br.readLine(); // Leer la segunda línea 
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                if (linea.startsWith("#") || linea.trim().isEmpty()) continue;
+                String[] partes = linea.split(",");
+                if (partes[0].equals("multiple")) {
+                    items.add(new multiple(partes[0], partes[1], partes[2], Arrays.copyOfRange(partes, 3, partes.length)));
+                } else if (partes[0].equals("vf")) {
+                    items.add(new vf(partes[0], partes[1], partes[2]));
+                }
             }
         }
-        br.close();
-        return items;
+        return new resultadocarga(asignatura, evaluacion, items);
     }
 }
 
