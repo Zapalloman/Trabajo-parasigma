@@ -1,1 +1,4 @@
-hola amigos estoy probando si funciona alo saludos gracias huevito rey
+para compilar:
+
+javac src/main/Main.java src/main/gui/VentanaPrincipal.java -d bin/
+java -cp bin main.Main
