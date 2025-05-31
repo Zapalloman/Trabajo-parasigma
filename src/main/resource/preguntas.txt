@@ -1,0 +1,2 @@
+multiple,¿Cuanto es 2 + 2?,4,2,1,6
+vf,¿Es cierto que 6/3 es 2?,verdadero
